@@ -167,6 +167,7 @@ function parse_stmt_list()
 
         table.insert(ast, newast)
     end
+    return true, ast
 end
 
 
@@ -242,3 +243,23 @@ function parse_statement()
       end
 
       table.insert(ast1, ast2)
+
+      while true do
+        if not matchString("elseif") then
+          break
+        end
+        good, tempast1 = parse_expr()
+        if not good then
+          return false, nil
+        end
+
+        good, tempast2 = parse_stmt_list()
+        if not good then
+          return false, nil
+        end
+        table.insert(tempast1, tempast2)
+      end
+  end
+end
+
+return parseit
